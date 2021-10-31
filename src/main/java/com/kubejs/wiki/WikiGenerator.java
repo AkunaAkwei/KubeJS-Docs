@@ -245,46 +245,49 @@ public class WikiGenerator {
 								boolean modDefault = false;
 								boolean modItself = false;
 
-								if (t.equals("public") || t.equals("private") || t.equals("protected")) {
-									throw new DocException("Method can't have a modifier!");
-								}
-
-								if (t.equals("nullable")) {
-									modNullable = true;
-									t = reader.readJavaName();
-								}
-
-								if (t.equals("static")) {
-									modStatic = true;
-									t = reader.readJavaName();
-								}
-
-								if (t.equals("final")) {
-									modFinal = true;
-									t = reader.readJavaName();
-								}
-
-								if (t.equals("deprecated")) {
-									modDeprecated = true;
-									t = reader.readJavaName();
-								}
-
-								if (t.equals("default")) {
-									if (modFinal) {
-										throw new DocException("Can't mix 'default' and 'final'!");
+								do {
+									if (t.equals("public") || t.equals("private") || t.equals("protected")) {
+										throw new DocException("Method can't have a modifier!");
 									}
 
-									modDefault = true;
-									t = reader.readJavaName();
-								}
-
-								if (t.equals("itself")) {
-									if (modStatic) {
-										throw new DocException("Can't mix 'itself' and 'static'!");
+									if (t.equals("nullable")) {
+										modNullable = true;
+										t = reader.readJavaName();
 									}
 
-									modItself = true;
-								}
+									if (t.equals("static")) {
+										modStatic = true;
+										t = reader.readJavaName();
+									}
+
+									if (t.equals("final")) {
+										modFinal = true;
+										t = reader.readJavaName();
+									}
+
+									if (t.equals("deprecated")) {
+										modDeprecated = true;
+										t = reader.readJavaName();
+									}
+
+									if (t.equals("default")) {
+										if (modFinal) {
+											throw new DocException("Can't mix 'default' and 'final'!");
+										}
+
+										modDefault = true;
+										t = reader.readJavaName();
+									}
+
+									if (t.equals("itself")) {
+										if (modStatic) {
+											throw new DocException("Can't mix 'itself' and 'static'!");
+										}
+
+										modItself = true;
+									}
+								} while (t.equals("default") || t.equals("deprecated") || t.equals("final") || t.equals("static") || t.equals("nullable"));
+								
 
 								DocType dt = modItself ? c.itselfType() : readType(c, lineGenerics, t, reader);
 								String name = reader.readJavaName();
