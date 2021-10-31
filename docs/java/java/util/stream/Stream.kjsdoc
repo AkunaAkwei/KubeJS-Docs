@@ -6,7 +6,7 @@ itself filter(Predicate<T> filter)
 
 <R> Stream<R> map(Function<T, R> mapper)
 
-IntStream mapToInt(Function<T, Integer> function)
+IntStream mapToInt(Function<T, Integer> fun)
 
 itself distinct()
 
